@@ -2,14 +2,11 @@ import { Request, Response } from 'express';
 import { Todo } from '../models/Todo';
 
 export const getAll = async (req: Request, res: Response) => {
-
     const list = await Todo.findAll();
     res.status(200).json({ list });
-
 }
 
 export const getOne = async (req: Request, res: Response) => {
-
     const id: string = req.params.id;
     let todo = await Todo.findByPk(id);
 
@@ -18,11 +15,9 @@ export const getOne = async (req: Request, res: Response) => {
     }
 
     res.status(404).json({ error: 'Item não encontrado' });
-
 }
 
 export const store = async (req: Request, res: Response) => {
-
     if (req.body.title) {
         
         let newTodo = await Todo.create({
