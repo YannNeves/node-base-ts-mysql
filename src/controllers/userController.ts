@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
 import { generateToken } from '../config/passport';
+import { sendMail } from '../config/mailer';
 
 export const register = async (req: Request, res: Response) => {
     if (req.body.email && req.body.password) {
@@ -11,6 +12,16 @@ export const register = async (req: Request, res: Response) => {
         if(!hasUser) {
             let newUser = await User.create({ email, password });
             const token = generateToken({ id: newUser.id });
+
+            let message = {
+                from: 'Yann Neves <yannvr@hotmail.com>',
+                to: email,
+                subject: 'Cadastro feito com sucesso',
+                html: 'Opa <strong>Teste</strong>, como vai?',
+                text: 'Opa Teste, como vai?'
+            };
+
+            sendMail(message);
             
             res.status(201).json({ id: newUser.id, token });
         } else {
